@@ -21,6 +21,7 @@ Therefore, you should be hosted in other container to export metrics.
 ```sh
 cd container
 docker-compose up -d
+curl -vvv http://localhost:9101/moneyforward.prom
 ```
 
 ## Metrics
