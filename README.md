@@ -27,3 +27,12 @@ curl -vvv http://localhost:9101/moneyforward.prom
 ## Metrics
 
 please check [metrics.yml](./config/metrics.yml) or [example](./container/example/moneyforward.prom)
+
+
+## Disclaim / 免責事項
+
+- 当スクリプトは、MoneyForward 本家からは非公認のものです。
+  - これらを利用したことによるいかなる損害についても当方では責任を負いかねます。
+- 当スクリプトはこれらのサイトに対し、負荷をかけることを目的として制作したものではありません。
+  - 利用の際は常識的な範囲でのアクセス頻度に抑えてください。
+- 先方に迷惑をかけない範囲での利用を強く推奨します。
