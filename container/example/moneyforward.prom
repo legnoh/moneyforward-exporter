@@ -1,0 +1,106 @@
+# HELP monthly_income_jpy ホーム > 当月収入
+# TYPE monthly_income_jpy gauge
+monthly_income_jpy{period="2021-08-25 - 2021-09-23"} 300000.0
+# HELP monthly_expenditure_jpy ホーム > 当月支出
+# TYPE monthly_expenditure_jpy gauge
+monthly_expenditure_jpy{period="2021-08-25 - 2021-09-23"} 150000.0
+# HELP monthly_balance_jpy ホーム > 当月収支
+# TYPE monthly_balance_jpy gauge
+monthly_balance_jpy{period="2021-08-25 - 2021-09-23"} 150000.0
+# HELP assets_total_jpy 資産 > 資本総額
+# TYPE assets_total_jpy gauge
+assets_total_jpy 5.000000e+06
+# HELP assets_subtotal_jpy 資産 > 資産の内訳 > 合計
+# TYPE assets_subtotal_jpy gauge
+assets_subtotal_jpy{type="預金・現金・暗号資産"} 4.000000e+06
+assets_subtotal_jpy{type="株式（現物）"} 100000.0
+assets_subtotal_jpy{type="投資信託"} 300000.0
+assets_subtotal_jpy{type="年金"} 500000
+assets_subtotal_jpy{type="ポイント・マイル"} 100000.0
+# HELP assets_deposit_jpy 資産 > 預金・現金・暗号資産 > 残高
+# TYPE assets_deposit_jpy gauge
+assets_deposit_jpy{account="財布",name="財布"} 30000.0
+assets_deposit_jpy{account="PayPay",name="PayPay"} 40000.0
+assets_deposit_jpy{account="nanaco",name="nanaco"} 10000.0
+assets_deposit_jpy{account="Suica(my-device)",name="Suica"} 10000.0
+assets_deposit_jpy{account="ABC銀行",name="代表口座 - 普通"} 900000.0
+assets_deposit_jpy{account="DEF銀行",name="普通預金"} 10000.0
+# HELP assets_stock_sum 資産 > 株式（現物） > 保有数
+# TYPE assets_stock_sum gauge
+assets_stock_sum{account="HOGE証券",code="1234",name="HOGE社"} 1.0
+# HELP assets_stock_average_jpy 資産 > 株式（現物） > 平均取得単価
+# TYPE assets_stock_average_jpy gauge
+assets_stock_average_jpy{account="HOGE証券",code="1234",name="HOGE社"} 400.0
+# HELP assets_stock_present_jpy 資産 > 株式（現物） > 現在値
+# TYPE assets_stock_present_jpy gauge
+assets_stock_present_jpy{account="HOGE証券",code="1234",name="HOGE社"} 440.0
+# HELP assets_stock_valuation_jpy 資産 > 株式（現物） > 評価額
+# TYPE assets_stock_valuation_jpy gauge
+assets_stock_valuation_jpy{account="HOGE証券",code="1234",name="HOGE社"} 1320.0
+# HELP assets_stock_dayoverday_jpy 資産 > 株式（現物） > 前日比
+# TYPE assets_stock_dayoverday_jpy gauge
+assets_stock_dayoverday_jpy{account="HOGE証券",code="1234",name="HOGE社"} 0.0
+# HELP assets_stock_gainloss_jpy 資産 > 株式（現物） > 評価損益
+# TYPE assets_stock_gainloss_jpy gauge
+assets_stock_gainloss_jpy{account="HOGE証券",code="1234",name="HOGE社"} 120.0
+# HELP assets_stock_gainloss_percent 資産 > 株式（現物） > 評価損益率
+# TYPE assets_stock_gainloss_percent gauge
+assets_stock_gainloss_percent{account="HOGE証券",code="1234",name="HOGE社"} 10.0
+# HELP assets_mutualfund_sum 資産 > 投資信託 > 保有数
+# TYPE assets_mutualfund_sum gauge
+assets_mutualfund_sum{account="HOGE証券",name="FUGAインデックス・ファンド"} 10.0
+# HELP assets_mutualfund_average_jpy 資産 > 投資信託 > 平均取得単価
+# TYPE assets_mutualfund_average_jpy gauge
+assets_mutualfund_average_jpy{account="HOGE証券",name="FUGAインデックス・ファンド"} 5000.0
+# HELP assets_mutualfund_base_jpy 資産 > 投資信託 > 平均取得単価
+# TYPE assets_mutualfund_base_jpy gauge
+assets_mutualfund_base_jpy{account="HOGE証券",name="FUGAインデックス・ファンド"} 10000.0
+# HELP assets_mutualfund_valuation_jpy 資産 > 投資信託 > 評価額
+# TYPE assets_mutualfund_valuation_jpy gauge
+assets_mutualfund_valuation_jpy{account="HOGE証券",name="FUGAインデックス・ファンド"} 100000.0
+# HELP assets_mutualfund_dayoverday_jpy 資産 > 投資信託 > 前日比
+# TYPE assets_mutualfund_dayoverday_jpy gauge
+assets_mutualfund_dayoverday_jpy{account="HOGE証券",name="FUGAインデックス・ファンド"} 30.0
+# HELP assets_mutualfund_gainloss_jpy 資産 > 投資信託 > 評価損益
+# TYPE assets_mutualfund_gainloss_jpy gauge
+assets_mutualfund_gainloss_jpy{account="HOGE証券",name="FUGAインデックス・ファンド"} 50000.0
+# HELP assets_mutualfund_gainloss_percent 資産 > 投資信託 > 評価損益率
+# TYPE assets_mutualfund_gainloss_percent gauge
+assets_mutualfund_gainloss_percent{account="HOGE証券",name="FUGAインデックス・ファンド"} 50.0
+# HELP assets_pension_acquisition_jpy 資産 > 年金 > 取得価額
+# TYPE assets_pension_acquisition_jpy gauge
+assets_pension_acquisition_jpy{name="厚生年金(一般)"} 0.0
+# HELP assets_pension_present_jpy 資産 > 年金 > 現在価値
+# TYPE assets_pension_present_jpy gauge
+assets_pension_present_jpy{name="厚生年金(一般)"} 500000.0
+# HELP assets_pension_gainloss_jpy 資産 > 年金 > 評価損益
+# TYPE assets_pension_gainloss_jpy gauge
+assets_pension_gainloss_jpy{name="厚生年金(一般)"} 0.0
+# HELP assets_pension_gainloss_percent 資産 > 年金 > 評価損益率
+# TYPE assets_pension_gainloss_percent gauge
+assets_pension_gainloss_percent{name="厚生年金(一般)"} 0.0
+# HELP assets_point_sum 資産 > ポイント・マイル > ポイント・マイル数
+# TYPE assets_point_sum gauge
+assets_point_sum{account="ABCカード",name="",type=""} 20000.0
+# HELP assets_point_rate 資産 > ポイント・マイル > 換算レート
+# TYPE assets_point_rate gauge
+assets_point_rate{account="ABCカード",name="",type=""} 5.0
+# HELP assets_point_present_jpy 資産 > ポイント・マイル > 現在の価値
+# TYPE assets_point_present_jpy gauge
+assets_point_present_jpy{account="ABCカード",name="",type=""} 100000.0
+# HELP assets_point_expire_date_info 資産 > ポイント・マイル > 有効期限
+# TYPE assets_point_expire_date_info gauge
+assets_point_expire_date_info{account="ABCカード",expired="2029/12/31",name="",type=""} 1.0
+# HELP liability_total_jpy 負債 > 負債総額
+# TYPE liability_total_jpy gauge
+liability_total_jpy 1.200000e+06
+# HELP liability_subtotal_jpy 負債 > 負債の内訳
+# TYPE liability_subtotal_jpy gauge
+liability_subtotal_jpy{type="クレジットカード利用残高"} 100000.0
+liability_subtotal_jpy{type="キャッシング・カードローン"} 100000.0
+liability_subtotal_jpy{type="奨学金"} 1.000000e+06
+# HELP liability_detail_jpy 負債 > 負債詳細
+# TYPE liability_detail_jpy gauge
+liability_detail_jpy{account="ABCカード",name="ご利用残高",type="クレジットカード利用残高"} 100000.0
+liability_detail_jpy{account="ABC銀行",name="ローン(目的ローン)",type="キャッシング・カードローン"} 100000.0
+liability_detail_jpy{account="XYZ奨学金",name="第一種奨学金",type="奨学金"} 1.000000e+06

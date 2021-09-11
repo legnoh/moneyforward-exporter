@@ -1,0 +1,50 @@
+---
+monthly:
+  url: "https://moneyforward.com/"
+  balance:
+    css_selector:
+      title: "section#cf-info > div.headline > h2.heading-normal:nth-child(1) > span"
+      data: "table#monthly_total_table_home > tbody > tr > td"
+  # withdrawal:
+  #   css_selector:
+
+assets:
+  url: "https://moneyforward.com/bs/portfolio"
+  total_amount:
+    css_selector: "section.bs-total-assets > div.heading-radius-box"
+  genre:
+    css_selector:
+      deposit:
+        root: "section#portfolio_det_depo > "
+        title: "h1"
+        amount: "section > h1"
+        table: "section > table"
+      stock:
+        root: "section#portfolio_det_eq > "
+        title: "h1"
+        amount: "section > h1"
+        table: "table"
+      mutualfund:
+        root: "section#portfolio_det_mf > "
+        title: "h1"
+        amount: "section > h1"
+        table: "table"
+      pension:
+        root: "section#portfolio_det_pns > "
+        title: "h1"
+        amount: "section > h1"
+        table: "table"
+      point:
+        root: "section#portfolio_det_po > "
+        title: "h1"
+        amount: "section > h1"
+        table: "table"
+liability:
+  url: "https://moneyforward.com/bs/liability"
+  total_amount:
+    css_selector: "section.bs-liability > section > div.heading-radius-box"
+  subtotal_amount:
+    css_selector: "section.bs-liability > div.liability-summary > section.bs-total-assets > table"
+  accounts:
+    css_selector:
+      table: "div#liability_det > section > section > table"

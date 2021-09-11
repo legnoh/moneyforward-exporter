@@ -1,0 +1,223 @@
+---
+monthly:
+  balance:
+    labels:
+      key: &balance_labels [period]
+    metrics:
+    - name: monthly_income_jpy
+      desc: ホーム > 当月収入
+      type: gauge
+      labels: *balance_labels
+      selector: income
+    - name: monthly_expenditure_jpy
+      desc: ホーム > 当月支出
+      type: gauge
+      labels: *balance_labels
+      selector: expenditure
+    - name: monthly_balance_jpy
+      desc: ホーム > 当月収支
+      type: gauge
+      labels: *balance_labels
+      selector: balance
+  # withdrawal:
+  #   labels:
+  #     key: &withdrawal_labels [name]
+  #     value: [種類・名称]
+  #   metrics:
+  #   - name: monthly_withdrawal_jpy
+  #     desc: トップページ > カード > 引落予定額
+  #     type: gauge
+  #     labels: *withdrawal_labels
+  #   - name: monthly_withdrawal_date
+  #     desc: トップページ > カード > 引落予定日
+  #     type: info
+  #     values:
+  #     - key: 引落日
+  #       value: 引き落とし日
+  #     labels: *withdrawal_labels
+
+assets:
+  total:
+    label:
+      key: &total_labels []
+      value: []
+    metrics:
+    - name: assets_total_jpy
+      desc: 資産 > 資本総額
+      type: gauge
+      labels: *total_labels
+  subtotal:
+    labels:
+      key: &subtotal_labels [type]
+      value: []
+    metrics:
+    - name: assets_subtotal_jpy
+      desc: 資産 > 資産の内訳 > 合計
+      type: gauge
+      labels: *subtotal_labels
+  deposit:
+    labels:
+      key: &deposit_labels [name,account]
+      value: [種類・名称, 保有金融機関]
+    metrics:
+    - name: assets_deposit_jpy
+      desc: 資産 > 預金・現金・暗号資産 > 残高
+      type: gauge
+      labels: *deposit_labels
+      th: 残高
+  stock:
+    labels:
+      key: &stock_labels [code,name,account]
+      value: [銘柄コード, 銘柄名, 保有金融機関]
+    metrics:
+    - name: assets_stock_sum
+      desc: 資産 > 株式（現物） > 保有数
+      type: gauge
+      labels: *stock_labels
+      th: 保有数
+    - name: assets_stock_average_jpy
+      desc: 資産 > 株式（現物） > 平均取得単価
+      type: gauge
+      labels: *stock_labels
+      th: 平均取得単価
+    - name: assets_stock_present_jpy
+      desc: 資産 > 株式（現物） > 現在値
+      type: gauge
+      labels: *stock_labels
+      th: 現在値
+    - name: assets_stock_valuation_jpy
+      desc: 資産 > 株式（現物） > 評価額
+      type: gauge
+      labels: *stock_labels
+      th: 評価額
+    - name: assets_stock_dayoverday_jpy
+      desc: 資産 > 株式（現物） > 前日比
+      type: gauge
+      labels: *stock_labels
+      th: 前日比
+    - name: assets_stock_gainloss_jpy
+      desc: 資産 > 株式（現物） > 評価損益
+      type: gauge
+      labels: *stock_labels
+      th: 評価損益
+    - name: assets_stock_gainloss_percent
+      desc: 資産 > 株式（現物） > 評価損益率
+      type: gauge
+      labels: *stock_labels
+      th: 評価損益率
+  mutualfund:
+    labels:
+      key: &mutualfund_labels [name,account]
+      value: [銘柄名, 保有金融機関]
+    metrics:
+    - name: assets_mutualfund_sum
+      desc: 資産 > 投資信託 > 保有数
+      type: gauge
+      labels: *mutualfund_labels
+      th: 保有数
+    - name: assets_mutualfund_average_jpy
+      desc: 資産 > 投資信託 > 平均取得単価
+      type: gauge
+      labels: *mutualfund_labels
+      th: 平均取得単価
+    - name: assets_mutualfund_base_jpy
+      desc: 資産 > 投資信託 > 平均取得単価
+      type: gauge
+      labels: *mutualfund_labels
+      th: 基準価額
+    - name: assets_mutualfund_valuation_jpy
+      desc: 資産 > 投資信託 > 評価額
+      type: gauge
+      labels: *mutualfund_labels
+      th: 評価額
+    - name: assets_mutualfund_dayoverday_jpy
+      desc: 資産 > 投資信託 > 前日比
+      type: gauge
+      labels: *mutualfund_labels
+      th: 前日比
+    - name: assets_mutualfund_gainloss_jpy
+      desc: 資産 > 投資信託 > 評価損益
+      type: gauge
+      labels: *mutualfund_labels
+      th: 評価損益
+    - name: assets_mutualfund_gainloss_percent
+      desc: 資産 > 投資信託 > 評価損益率
+      type: gauge
+      labels: *mutualfund_labels
+      th: 評価損益率
+  pension:
+    labels:
+      key: &pension_labels [name]
+      value: [名称]
+    metrics:
+    - name: assets_pension_acquisition_jpy
+      desc: 資産 > 年金 > 取得価額
+      type: gauge
+      labels: *pension_labels
+      th: 取得価額
+    - name: assets_pension_present_jpy
+      desc: 資産 > 年金 > 現在価値
+      type: gauge
+      labels: *pension_labels
+      th: 現在価値
+    - name: assets_pension_gainloss_jpy
+      desc: 資産 > 年金 > 評価損益
+      type: gauge
+      labels: *pension_labels
+      th: 評価損益
+    - name: assets_pension_gainloss_percent
+      desc: 資産 > 年金 > 評価損益率
+      type: gauge
+      labels: *pension_labels
+      th: 評価損益率
+  point:
+    labels:
+      key: &point_labels [name,type,account]
+      value: [名称, 種類, 保有金融機関]
+    metrics:
+    - name: assets_point_sum
+      desc: 資産 > ポイント・マイル > ポイント・マイル数
+      type: gauge
+      labels: *point_labels
+      th: ポイント・マイル数
+    - name: assets_point_rate
+      desc: 資産 > ポイント・マイル > 換算レート
+      type: gauge
+      labels: *point_labels
+      th: 換算レート
+    - name: assets_point_present_jpy
+      desc: 資産 > ポイント・マイル > 現在の価値
+      type: gauge
+      labels: *point_labels
+      th: 現在の価値
+    - name: assets_point_expire_date
+      desc: 資産 > ポイント・マイル > 有効期限
+      type: info
+      values:
+      - key: expired
+        th: 有効期限
+      labels: *point_labels
+
+liability:
+  total:
+    metrics:
+    - name: liability_total_jpy
+      desc: 負債 > 負債総額
+      type: gauge
+      labels: []
+  subtotal:
+    metrics:
+    - name: liability_subtotal_jpy
+      desc: 負債 > 負債の内訳
+      type: gauge
+      labels: [type]
+  detail:
+    labels:
+      key: &li_detail_labels [type,name,account]
+      value: [種類,名称・説明, 保有金融機関]
+    metrics:
+    - name: liability_detail_jpy
+      desc: 負債 > 負債詳細
+      type: gauge
+      labels: *li_detail_labels
+      th: 残高
