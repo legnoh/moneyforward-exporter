@@ -28,7 +28,7 @@ jobs:
     - name: Start XVFB
       run: Xvfb :99 &
     - name: Run scraping
-      run: pipenv run scrap
+      run: pipenv run main
       env:
         DISPLAY: :99
         MF_EMAIL: ${{ secrets.MF_EMAIL }}
