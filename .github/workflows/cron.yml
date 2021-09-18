@@ -1,0 +1,46 @@
+name: Upload MoneyForward prom data
+
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: nanasess/setup-chromedriver@v1.0.5
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install Japanese Fonts
+      run: |
+        sudo apt install -y fonts-ipafont
+        fc-cache -fv
+        fc-list | grep -i ipa
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+        pipenv install
+    - name: Start XVFB
+      run: Xvfb :99 &
+    - name: Run scraping
+      run: pipenv run scrap
+      env:
+        DISPLAY: :99
+        MF_EMAIL: ${{ secrets.MF_EMAIL }}
+        MF_PASSWORD: ${{ secrets.MF_PASSWORD }}
+    - name: setup GCP access
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+    - name: Upload JSON to GCS
+      uses: google-github-actions/upload-cloud-storage@main
+      with:
+        path: ./container/public/moneyforward.prom
+        destination: ${{ secrets.BUCKET_NAME }}/
