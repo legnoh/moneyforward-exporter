@@ -56,9 +56,13 @@ def format_balance(string_price, key_name=None):
     if column_type == 'int':
         if string_price == '':
             return 0
+        elif string_price == '-':
+            return 0
         return int(string_price)
     elif column_type == 'float':
         if string_price == '':
+            return 0.0
+        elif string_price == '-':
             return 0.0
         return float(string_price)
     else:
