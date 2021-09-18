@@ -8,6 +8,7 @@ mypy = "*"
 selenium = "*"
 chromedriver-binary = "==92.0.4515.107.0"
 pyyaml = "*"
+prometheus-client = "*"
 
 [dev-packages]
 
