@@ -1,7 +1,5 @@
-moneyforward_exporter
+moneyforward-exporter
 ====
-
-## WIP
 
 Prometheus exporter for [MoneyForward ME](https://www.moneyforward.com/).
 
