@@ -6,6 +6,7 @@ import modules.moneyforward.common as mf
 import modules.moneyforward.monthly as mf_monthly
 import modules.moneyforward.assets as mf_assets
 import modules.moneyforward.liability as mf_liability
+import modules.moneyforward.budgets as mf_budgets
 from prometheus_client import CollectorRegistry, write_to_textfile
 
 # initialize
@@ -23,7 +24,10 @@ mf_driver = mf.login(driver, os.environ['MF_EMAIL'], os.environ['MF_PASSWORD'])
 
 # get Monthly balance metrics
 print("gathering monthly data...")
-mf_monthly.set_monthly_metrics(mf_driver,registry,config['monthly'], metrics['monthly'])
+mf_monthly.set_monthly_metrics(mf_driver,registry,config['monthly']['balance'], metrics['monthly']['balance'])
+
+print("gathering withdrawal data...")
+mf_monthly.set_latest_withdrawal_metrics(mf_driver,registry,config['monthly']['withdrawal'], metrics['monthly']['withdrawal'])
 
 # set assets metrics
 print("gathering assets data...")
@@ -32,6 +36,10 @@ mf_assets.set_assets_metrics(mf_driver,registry,config['assets'], metrics['asset
 # set liability metrics
 print("gathering liability data...")
 mf_liability.set_liability_metrics(mf_driver,registry,config['liability'], metrics['liability'])
+
+# set budget metrics
+print("gathering budget data...")
+mf_budgets.set_budget_metrics(mf_driver,registry,config['budget'], metrics['budget'])
 
 mf_driver.quit()
 write_to_textfile('./container/public/moneyforward.prom', registry)

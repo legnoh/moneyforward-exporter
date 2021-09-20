@@ -5,9 +5,13 @@ monthly:
     css_selector:
       title: "section#cf-info > div.headline > h2.heading-normal:nth-child(1) > span"
       data: "table#monthly_total_table_home > tbody > tr > td"
-  # withdrawal:
-  #   css_selector:
-
+  withdrawal:
+    css_selector:
+      accounts: "li.account"
+      name: "div.heading-accounts"
+      updated: "div.heading-accounts > div.date"
+      price: "ul.amount > li.minus-color"
+      schedule: "ul.amount > li.schedule"
 assets:
   url: "https://moneyforward.com/bs/portfolio"
   total_amount:
@@ -48,3 +52,14 @@ liability:
   accounts:
     css_selector:
       table: "div#liability_det > section > section > table"
+
+budget:
+  url: "https://moneyforward.com/spending_summaries?offset_month=0"
+  css_selector:
+    period: "section.progress_table > div.date_range > div.msg_container > div.msg"
+    budgets: "section.progress_table > table.table > tbody > tr"
+    name: "th"
+    progress: "td.amount > div.progress > div > span"
+    balance: "td.remaining"
+    total_class_name: "total_expense"
+    subtotal_class_name: "budget_type_total_expense"
