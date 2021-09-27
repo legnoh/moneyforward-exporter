@@ -49,7 +49,7 @@ def judge_column_type(column_name):
 
 def format_balance(string_price, key_name=None):
     string_price = string_price.strip()
-    needles = ['資産総額', '負債総額', '合計', '：', ',', '円', 'ポイント', '%', 'マイル', '当月利用額', '(未確定)', ' ', '　', '\n']
+    needles = ['資産総額', '負債総額', '合計', '：', ',', '円', 'ポイント', '%', 'マイル', '当月利用額', '未確定', '引き落とし日:', '当月分締め日:', '(', ')', ' ', '　', '\n']
     for needle in needles:
         string_price = string_price.replace(needle, '')
     column_type = judge_column_type(key_name)

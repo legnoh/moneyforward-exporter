@@ -26,7 +26,7 @@ def set_latest_withdrawal_metrics(driver,registry,config,metrics):
             updated = account.find_element_by_css_selector(config['css_selector']['updated']).text
             name = name_raw.replace(updated, '').replace('\n', '')
             price = mf.format_balance(account.find_element_by_css_selector(config['css_selector']['price']).text)
-            schedule = account.find_element_by_css_selector(config['css_selector']['schedule']).text
+            schedule = mf.format_balance(account.find_element_by_css_selector(config['css_selector']['schedule']).text, 'str')
             
             if m_price == None:
                 m_price = mf.create_metric_instance(metrics['metrics'][0], registry)
