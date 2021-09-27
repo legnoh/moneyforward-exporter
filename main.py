@@ -22,6 +22,9 @@ with open('config/metrics.yml', 'r') as stream:
 # login
 mf_driver = mf.login(driver, os.environ['MF_EMAIL'], os.environ['MF_PASSWORD'])
 
+# reload
+mf_driver = mf.reload(mf_driver)
+
 # get Monthly balance metrics
 print("gathering monthly data...")
 mf_monthly.set_monthly_metrics(mf_driver,registry,config['monthly']['balance'], metrics['monthly']['balance'])

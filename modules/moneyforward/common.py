@@ -1,3 +1,4 @@
+import time
 from prometheus_client import CollectorRegistry, Gauge, write_to_textfile, Counter, Info
 
 def login(driver, email, password):
@@ -13,6 +14,15 @@ def login(driver, email, password):
 
     driver.get('https://moneyforward.com/sign_in/')
     driver.find_element_by_class_name('submitBtn').click()
+    return driver
+
+def reload(driver):
+    driver.get('https://moneyforward.com/');
+    driver.implicitly_wait(10);
+    refresh_button = driver.find_element_by_css_selector('a.refresh')
+    refresh_button.click()
+    time.sleep(300)
+    driver.refresh()
     return driver
 
 def judge_column_type(column_name):
