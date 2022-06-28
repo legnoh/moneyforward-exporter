@@ -1,25 +1,26 @@
 import time
 from prometheus_client import CollectorRegistry, Gauge, write_to_textfile, Counter, Info
+from selenium.webdriver.common.by import By
 
 def login(driver, email, password):
     driver.get('https://id.moneyforward.com/sign_in/email/');
     driver.implicitly_wait(10);
-    email_box = driver.find_element_by_name('mfid_user[email]')
+    email_box = driver.find_element(By.NAME, 'mfid_user[email]')
     email_box.send_keys(email)
     email_box.submit()
 
-    password_box = driver.find_element_by_name('mfid_user[password]')
+    password_box = driver.find_element(By.NAME, 'mfid_user[password]')
     password_box.send_keys(password)
     password_box.submit()
 
     driver.get('https://moneyforward.com/sign_in/')
-    driver.find_element_by_class_name('submitBtn').click()
+    driver.find_element(By.CLASS_NAME, 'submitBtn').click()
     return driver
 
 def reload(driver):
     driver.get('https://moneyforward.com/');
     driver.implicitly_wait(10);
-    refresh_button = driver.find_element_by_css_selector('a.refresh')
+    refresh_button = driver.find_element(By.CSS_SELECTOR, 'a.refresh')
     refresh_button.click()
     time.sleep(300)
     driver.refresh()
@@ -80,12 +81,12 @@ def format_balance(string_price, key_name=None):
 
 def table_to_dict(table):
     results = []
-    rows = table.find_elements_by_tag_name('tr')
-    keys = rows[0].find_elements_by_tag_name('th')
+    rows = table.find_elements(By.TAG_NAME, 'tr')
+    keys = rows[0].find_elements(By.TAG_NAME, 'th')
     rows.pop(0)
     
     for tr in rows:
-        account = tr.find_elements_by_tag_name('td')
+        account = tr.find_elements(By.TAG_NAME, 'td')
         result = {}
         for i in range(len(keys)):
             result[keys[i].text] = format_balance(account[i].text, keys[i].text)
@@ -94,10 +95,10 @@ def table_to_dict(table):
 
 def kv_table_to_dict(table):
     result = {}
-    rows = table.find_elements_by_tag_name('tr')
+    rows = table.find_elements(By.TAG_NAME, 'tr')
     for row in rows:
-        key = row.find_element_by_tag_name('th').text
-        price = row.find_element_by_tag_name('td').text
+        key = row.find_element(By.TAG_NAME, 'th').text
+        price = row.find_element(By.TAG_NAME, 'td').text
         result[key] = format_balance(price)
     return result
 
