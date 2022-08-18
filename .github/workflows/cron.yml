@@ -1,9 +1,6 @@
 name: Upload MoneyForward prom data
 
 on:
-  push:
-    branches:
-      - "main"
   workflow_dispatch:
   schedule:
     - cron: '0 5,11,17,23 * * 0'
