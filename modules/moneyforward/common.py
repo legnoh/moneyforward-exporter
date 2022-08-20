@@ -15,6 +15,7 @@ def login(driver, email, password):
 
     driver.get('https://moneyforward.com/sign_in/')
     driver.find_element(By.CLASS_NAME, 'submitBtn').click()
+    time.sleep(10)
     return driver
 
 def reload(driver):
