@@ -9,7 +9,7 @@ def login(driver, email, password):
     email_box.send_keys(email)
     email_box.submit()
 
-    password_box = driver.find_element(By.NAME, 'mfid_user[password]')
+    password_box = driver.find_element(By.CSS_SELECTOR, 'input.M_ePduw4.inputItem')
     password_box.send_keys(password)
     password_box.submit()
 
