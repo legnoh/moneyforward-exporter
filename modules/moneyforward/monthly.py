@@ -3,19 +3,23 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
 # get monthly balance data
-def set_monthly_metrics(driver, registry, config, metrics):
+def set_monthly_metrics(driver, all_metrics, config, metrics):
+    driver.get(config['url'])
+
     period = driver.find_element(By.CSS_SELECTOR, config['css_selector']['title']).text.lstrip("(").rstrip(")")
     datas = driver.find_elements(By.CSS_SELECTOR, config['css_selector']['data'])
 
     # define and set value
     i = 0
     for metric in metrics['metrics']:
-        m = mf.create_metric_instance(metric, registry)
+        m = all_metrics[metric['name']]
         m.labels(period).set(mf.format_balance(datas[i].text))
         i += 1
 
 # get monthly drawal data
-def set_latest_withdrawal_metrics(driver,registry,config,metrics):
+def set_latest_withdrawal_metrics(driver,all_metrics,config,metrics):
+    driver.get(config['url'])
+
     accounts = driver.find_elements(By.CSS_SELECTOR, config['css_selector']['accounts'])
     driver.implicitly_wait(0.5);
     m_price = None
@@ -30,9 +34,9 @@ def set_latest_withdrawal_metrics(driver,registry,config,metrics):
             schedule = mf.format_balance(account.find_element(By.CSS_SELECTOR, config['css_selector']['schedule']).text, 'str')
             
             if m_price == None:
-                m_price = mf.create_metric_instance(metrics['metrics'][0], registry)
+                m_price = all_metrics[metrics['metrics'][0]['name']]
             if m_schedule == None:
-                m_schedule = mf.create_metric_instance(metrics['metrics'][1], registry)
+                m_schedule = all_metrics[metrics['metrics'][1]['name']]
             
             m_price.labels(name).set(price)
             m_schedule.labels(name).info({'schedule': schedule})

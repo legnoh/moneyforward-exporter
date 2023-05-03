@@ -1,22 +1,27 @@
 import time
-from prometheus_client import CollectorRegistry, Gauge, write_to_textfile, Counter, Info
+from prometheus_client import Gauge, Counter, Info
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 def login(driver, email, password):
-    driver.get('https://id.moneyforward.com/sign_in/email/');
-    driver.implicitly_wait(10);
-    email_box = driver.find_element(By.NAME, 'mfid_user[email]')
-    email_box.send_keys(email)
-    email_box.submit()
+    try:
+        driver.get('https://id.moneyforward.com/sign_in/email/')
+        driver.implicitly_wait(10)
+        email_box = driver.find_element(By.NAME, 'mfid_user[email]')
+        email_box.send_keys(email)
+        email_box.submit()
 
-    password_box = driver.find_element(By.CSS_SELECTOR, 'input.M_ePduw4.inputItem')
-    password_box.send_keys(password)
-    password_box.submit()
+        password_box = driver.find_element(By.NAME, 'mfid_user[password]')
+        password_box.send_keys(password)
+        password_box.submit()
 
-    driver.get('https://moneyforward.com/sign_in/')
-    driver.find_element(By.CLASS_NAME, 'submitBtn').click()
-    time.sleep(10)
-    return driver
+        driver.get('https://moneyforward.com/sign_in/')
+        driver.find_element(By.CLASS_NAME, 'submitBtn').click()
+        time.sleep(10)
+        return driver
+
+    except NoSuchElementException:
+        return None
 
 def reload(driver):
     driver.get('https://moneyforward.com/');
@@ -60,11 +65,14 @@ def judge_column_type(column_name):
         return 'str'
 
 def format_balance(string_price, key_name=None):
-    string_price = string_price.strip()
-    needles = ['資産総額', '負債総額', '合計', ':', '：', ',', '円', 'ポイント', '%', 'マイル', '当月利用額', '未確定', '引き落とし日', '当月分締め日', '(', ')', ' ', '　', '\n']
-    for needle in needles:
-        string_price = string_price.replace(needle, '')
     column_type = judge_column_type(key_name)
+    string_price = string_price.strip()
+
+    if column_type != 'str':
+        needles = ['資産総額', '負債総額', '合計', ':', '：', ',', '円', 'ポイント', '%', 'マイル', '当月利用額', '未確定', '引き落とし日', '当月分締め日', '(', ')', ' ', '　', '\n']
+        for needle in needles:
+            string_price = string_price.replace(needle, '')
+
     if column_type == 'int':
         if string_price == '':
             return 0
@@ -116,9 +124,18 @@ def create_metric_instance(metric, registry):
         return None
     return m
 
-def set_metrics_by_table_data(accounts, metrics, registry):
+def create_metric_all_instance(metrics:dict, registry):
+    all_metrics ={}
+    for main_category in metrics.values():
+        for sub_category in main_category.values():
+           for single_metrics in sub_category['metrics']:
+               m = create_metric_instance(single_metrics, registry)
+               all_metrics[single_metrics['name']] = m
+    return all_metrics
+
+def set_metrics_by_table_data(accounts, metrics, all_metrics):
     for metric in metrics['metrics']:
-        m = create_metric_instance(metric, registry)
+        m = all_metrics[metric['name']]
         for account in accounts:
             labels = []
             for label in metrics['labels']['value']:

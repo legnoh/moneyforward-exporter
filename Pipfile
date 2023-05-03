@@ -9,6 +9,7 @@ mypy = "*"
 prometheus-client = "*"
 pyyaml = "*"
 selenium = "*"
+webdriver-manager = "*"
 
 [dev-packages]
 
