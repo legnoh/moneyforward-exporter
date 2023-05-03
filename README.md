@@ -5,31 +5,36 @@ Prometheus exporter for [MoneyForward ME](https://www.moneyforward.com/).
 
 ## Usage
 
-This exporter script works for creating metrics file only.
+### docker
 
 ```sh
-git clone https://github.com/legnoh/moneyforward_exporter.git && cd moneyforward_exporter
-pipenv install
-pipenv shell
+docker run -d -p 8000:8000 \
+  -e MONEYFORWARD_EMAIL="yourname@mail.com" \
+  -e MONEYFORWARD_PASSWORD="yourPassw0rd" \
+  legnoh/moneyforward-exporter
 
-# prepare your credential
+# wait 60s and get request
+curl http://localhost:8000/metrics
+```
+
+### local
+
+```sh
+# clone
+git clone https://github.com/legnoh/moneyforward-exporter.git && cd moneyforward-exporter
+pipenv install
+
+# please fulfil your credentials
 cp example.env .env
 vi .env
 
+# execute
 pipenv run main
-```
-
-Therefore, you should be hosted in other container to export metrics.
-
-```sh
-cd container
-docker-compose up -d
-curl -vvv http://localhost:9101/moneyforward.prom
 ```
 
 ## Metrics
 
-please check [metrics.yml](./config/metrics.yml) or [example](./container/example/moneyforward.prom)
+please check [example](./example.prom)
 
 ## Disclaim / 免責事項
 

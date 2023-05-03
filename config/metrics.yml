@@ -223,41 +223,39 @@ liability:
       th: 残高
 
 budget:
-  progress:
-    total:
-      metrics:
-      - name: mf_budget_progress_total_jpy
-        desc: 予算 > 使った金額 > 支出全体
-        type: gauge
-        labels: &budget_labels [period]
-    subtotal:
-      metrics:
-      - name: mf_budget_progress_subtotal_jpy
-        desc: 予算 > 使った金額 > 分類（手元で管理するお金・毎月決まった支出）
-        type: gauge
-        labels: &budget_category_labels [period, category]
-    category:
-      metrics:
-      - name: mf_budget_progress_category_jpy
-        desc: 予算 > 使った金額 > 大項目
-        type: gauge
-        labels: *budget_category_labels
-  balance:
-    total:
-      metrics:
-      - name: mf_budget_balance_total_jpy
-        desc: 予算 > 残り使える金額 > 支出全体
-        type: gauge
-        labels: *budget_labels
-    subtotal:
-      metrics:
-      - name: mf_budget_balance_subtotal_jpy
-        desc: 予算 > 残り使える金額 > 分類（手元で管理するお金・毎月決まった支出）
-        type: gauge
-        labels: *budget_category_labels
-    category:
-      metrics:
-      - name: mf_budget_balance_category_jpy
-        desc: 予算 > 残り使える金額 > 大項目
-        type: gauge
-        labels: *budget_category_labels
+  progress_total:
+    metrics:
+    - name: mf_budget_progress_total_jpy
+      desc: 予算 > 使った金額 > 支出全体
+      type: gauge
+      labels: &budget_labels [period]
+  progress_subtotal:
+    metrics:
+    - name: mf_budget_progress_subtotal_jpy
+      desc: 予算 > 使った金額 > 分類（手元で管理するお金・毎月決まった支出）
+      type: gauge
+      labels: &budget_category_labels [period, category]
+  progress_category:
+    metrics:
+    - name: mf_budget_progress_category_jpy
+      desc: 予算 > 使った金額 > 大項目
+      type: gauge
+      labels: *budget_category_labels
+  balance_total:
+    metrics:
+    - name: mf_budget_balance_total_jpy
+      desc: 予算 > 残り使える金額 > 支出全体
+      type: gauge
+      labels: *budget_labels
+  balance_subtotal:
+    metrics:
+    - name: mf_budget_balance_subtotal_jpy
+      desc: 予算 > 残り使える金額 > 分類（手元で管理するお金・毎月決まった支出）
+      type: gauge
+      labels: *budget_category_labels
+  balance_category:
+    metrics:
+    - name: mf_budget_balance_category_jpy
+      desc: 予算 > 残り使える金額 > 大項目
+      type: gauge
+      labels: *budget_category_labels
