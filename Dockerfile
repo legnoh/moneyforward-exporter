@@ -3,7 +3,6 @@ FROM seleniarm/standalone-chromium:latest
 USER root
 WORKDIR /usr/src/app
 
-ARG PYTHON_VERSION="3.10.0"
 ENV DISPLAY=:99
 ENV TZ="Asia/Tokyo"
 
