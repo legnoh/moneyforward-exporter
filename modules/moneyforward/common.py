@@ -7,16 +7,25 @@ def login(driver, email, password):
     try:
         driver.get('https://id.moneyforward.com/sign_in/email/')
         driver.implicitly_wait(10)
+
+        # メール入力
         email_box = driver.find_element(By.NAME, 'mfid_user[email]')
         email_box.send_keys(email)
         email_box.submit()
 
+        # パスワード入力
         password_box = driver.find_element(By.NAME, 'mfid_user[password]')
         password_box.send_keys(password)
         password_box.submit()
 
+        # このアカウントでログインするの画面を通る
         driver.get('https://moneyforward.com/sign_in/')
-        driver.find_element(By.CLASS_NAME, 'submitBtn').click()
+        driver.find_element(By.ID, 'submitto').click()
+
+        # バイオメトリクス認証の画面が出ていた場合は後で登録を押す
+        if str(driver.current_url).startswith("https://id.moneyforward.com/passkey_promotion"):
+            driver.find_element(By.CSS_SELECTOR, "div.registerLaterWrapper > a").click()
+
         time.sleep(10)
         return driver
 
