@@ -69,4 +69,6 @@ if __name__ == '__main__':
 
         print("exporting moneyforward data successfully!")
 
+        mf_driver.close()
+
         time.sleep(3600*4)
