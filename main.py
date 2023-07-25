@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromiumService
 from selenium.webdriver.chrome.service import Service as ChromeService
 from prometheus_client import CollectorRegistry, start_http_server
+from selenium.common.exceptions import WebDriverException,TimeoutException
 
 import modules.moneyforward.common as mf
 import modules.moneyforward.monthly as mf_monthly
@@ -15,23 +16,28 @@ logging.basicConfig(format=log_format, datefmt='%Y-%m-%d %H:%M:%S%z', level=logg
 
 if __name__ == '__main__':
 
-    # initialize
     logging.info("initializing exporter...")
     registry = CollectorRegistry()
     start_http_server(int(os.environ.get('PORT', 8000)), registry=registry)
 
-    # initialize chromium & selenium webdriver
     logging.info("initializing chromium options...")
     options = webdriver.ChromeOptions()
     options.add_argument('--disable-dev-shm-usage')
 
-    if platform.system() == 'Linux':
-        logging.info("initializing chromium...")
-        driver = webdriver.Chrome(service=ChromiumService(), options=options)
-    else:
-        logging.info("initializing chrome...")
-        driver = webdriver.Chrome(service=ChromeService(), options=options)
-    driver.implicitly_wait(10)
+    driver_ready = False
+    while driver_ready == False:
+        try:
+            if platform.system() == 'Linux':
+                logging.info("initializing chromium...")
+                driver = webdriver.Chrome(service=ChromiumService(), options=options)
+            else:
+                logging.info("initializing chrome...")
+                driver = webdriver.Chrome(service=ChromeService(), options=options)
+            driver.implicitly_wait(10)
+            driver_ready = True
+        except (WebDriverException) as e:
+            logging.error(e)
+            continue
 
     logging.info("loading config files...")
     with open('config/scraping.yml', 'r') as stream:
