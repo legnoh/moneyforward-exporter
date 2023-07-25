@@ -1,3 +1,4 @@
+import datetime, time
 import modules.moneyforward.common as mf
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -20,6 +21,8 @@ def set_monthly_metrics(driver, all_metrics, config, metrics):
 def set_latest_withdrawal_metrics(driver,all_metrics,config,metrics):
     driver.get(config['url'])
 
+    now = datetime.datetime.now()
+
     accounts = driver.find_elements(By.CSS_SELECTOR, config['css_selector']['accounts'])
     m_price = None
     m_schedule = None
@@ -30,14 +33,21 @@ def set_latest_withdrawal_metrics(driver,all_metrics,config,metrics):
             updated = account.find_element(By.CSS_SELECTOR, config['css_selector']['updated']).text
             name = name_raw.replace(updated, '').replace('\n', '')
             price = mf.format_balance(account.find_element(By.CSS_SELECTOR, config['css_selector']['price']).text)
-            schedule = mf.format_balance(account.find_element(By.CSS_SELECTOR, config['css_selector']['schedule']).text, 'str')
-            
+            schedule_raw = mf.format_balance(account.find_element(By.CSS_SELECTOR, config['css_selector']['schedule']).text, 'str')
+            schedule_dt = datetime.datetime.strptime(schedule_raw, '引き落とし日:(%Y/%m/%d)')
+            schedule = schedule_dt.strftime("%Y/%m/%d")
+
             if m_price == None:
                 m_price = all_metrics[metrics['metrics'][0]['name']]
             if m_schedule == None:
                 m_schedule = all_metrics[metrics['metrics'][1]['name']]
             
-            m_price.labels(name).set(price)
-            m_schedule.labels(name).info({'schedule': schedule})
+            # 今日より後の場合に限り予定として表示、そうでない場合は0にする
+            if (now - schedule_dt).days < 0:
+                m_price.labels(name).set(price)
+                m_schedule.labels(name).info({'schedule': schedule})
+            else:
+                m_price.labels(name).set(0)
+                m_schedule.labels(name).info({'schedule': schedule})
         except NoSuchElementException:
             continue
