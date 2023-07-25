@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromiumService
 from selenium.webdriver.chrome.service import Service as ChromeService
 from prometheus_client import CollectorRegistry, start_http_server
-from selenium.common.exceptions import WebDriverException,TimeoutException
+from selenium.common.exceptions import WebDriverException
 
 import modules.moneyforward.common as mf
 import modules.moneyforward.monthly as mf_monthly
