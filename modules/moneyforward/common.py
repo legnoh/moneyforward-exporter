@@ -6,7 +6,6 @@ from selenium.common.exceptions import NoSuchElementException
 def login(driver, email, password):
     try:
         driver.get('https://id.moneyforward.com/sign_in/email/')
-        driver.implicitly_wait(10)
 
         # メール入力
         email_box = driver.find_element(By.NAME, 'mfid_user[email]')
@@ -34,7 +33,6 @@ def login(driver, email, password):
 
 def reload(driver):
     driver.get('https://moneyforward.com/');
-    driver.implicitly_wait(10);
     refresh_button = driver.find_element(By.CSS_SELECTOR, 'a.refresh')
     refresh_button.click()
     time.sleep(300)

@@ -21,7 +21,6 @@ def set_latest_withdrawal_metrics(driver,all_metrics,config,metrics):
     driver.get(config['url'])
 
     accounts = driver.find_elements(By.CSS_SELECTOR, config['css_selector']['accounts'])
-    driver.implicitly_wait(0.5);
     m_price = None
     m_schedule = None
 
@@ -42,4 +41,3 @@ def set_latest_withdrawal_metrics(driver,all_metrics,config,metrics):
             m_schedule.labels(name).info({'schedule': schedule})
         except NoSuchElementException:
             continue
-    driver.implicitly_wait(10);
