@@ -11,7 +11,8 @@ import modules.moneyforward.liability as mf_liability
 import modules.moneyforward.budgets as mf_budgets
 
 log_format = '%(asctime)s[%(filename)s:%(lineno)d][%(levelname)s] %(message)s'
-logging.basicConfig(format=log_format, datefmt='%Y-%m-%d %H:%M:%S%z', level=logging.INFO)
+log_level = os.getenv("LOGLEVEL", logging.INFO)
+logging.basicConfig(format=log_format, datefmt='%Y-%m-%d %H:%M:%S%z', level=log_level)
 
 if __name__ == '__main__':
 
@@ -29,7 +30,7 @@ if __name__ == '__main__':
     else:
         logging.info("initializing chrome...")
         driver = webdriver.Chrome(service=ChromeService(), options=options)
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(5)
 
     logging.info("loading config files...")
     with open('config/scraping.yml', 'r') as stream:
@@ -70,5 +71,4 @@ if __name__ == '__main__':
         mf_budgets.set_budget_metrics(mf_driver,all_metrics,config['budget'], metrics['budget'])
 
         logging.info("exporting moneyforward data successfully!")
-        mf_driver.close()
         time.sleep(3600*4)

@@ -1,4 +1,4 @@
-import datetime, time
+import datetime, logging
 import modules.moneyforward.common as mf
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -20,7 +20,6 @@ def set_monthly_metrics(driver, all_metrics, config, metrics):
 # get monthly drawal data
 def set_latest_withdrawal_metrics(driver,all_metrics,config,metrics):
     driver.get(config['url'])
-
     now = datetime.datetime.now()
 
     accounts = driver.find_elements(By.CSS_SELECTOR, config['css_selector']['accounts'])
@@ -29,10 +28,15 @@ def set_latest_withdrawal_metrics(driver,all_metrics,config,metrics):
 
     for account in accounts:
         try:
+            logging.debug("account target: %s", account)
             name_raw = account.find_element(By.CSS_SELECTOR, config['css_selector']['name']).text
             updated = account.find_element(By.CSS_SELECTOR, config['css_selector']['updated']).text
             name = name_raw.replace(updated, '').replace('\n', '')
+
+            logging.debug("getting price...: %s", config['css_selector']['price'])
             price = mf.format_balance(account.find_element(By.CSS_SELECTOR, config['css_selector']['price']).text)
+
+            logging.debug("getting schedule...: %s", config['css_selector']['schedule'])
             schedule_raw = mf.format_balance(account.find_element(By.CSS_SELECTOR, config['css_selector']['schedule']).text, 'str')
             schedule_dt = datetime.datetime.strptime(schedule_raw, '引き落とし日:(%Y/%m/%d)')
             schedule = schedule_dt.strftime("%Y/%m/%d")
