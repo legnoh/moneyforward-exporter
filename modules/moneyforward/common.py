@@ -5,7 +5,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 def login(driver, email, password):
     try:
-        driver.get('https://id.moneyforward.com/sign_in/email/')
+        driver.get('https://id.moneyforward.com/sign_in/')
 
         # メール入力
         email_box = driver.find_element(By.NAME, 'mfid_user[email]')
@@ -23,7 +23,7 @@ def login(driver, email, password):
 
         # バイオメトリクス認証の画面が出ていた場合は後で登録を押す
         if str(driver.current_url).startswith("https://id.moneyforward.com/passkey_promotion"):
-            driver.find_element(By.CSS_SELECTOR, "div.registerLaterWrapper > a").click()
+            driver.find_element(By.CSS_SELECTOR, "main.js-mfid-users-passkey-promotions-show > div > div > div > div > section > div > a").click()
 
         time.sleep(10)
         return driver
