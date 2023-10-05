@@ -1,7 +1,6 @@
 import logging,os,platform,time,yaml,sys
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromiumService
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 from prometheus_client import CollectorRegistry, start_http_server
 
 import modules.moneyforward.common as mf
@@ -22,16 +21,10 @@ if __name__ == '__main__':
 
     logging.info("initializing chromium options...")
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-
-    if platform.system() == 'Linux':
-        logging.info("initializing chromium...")
-        driver = webdriver.Chrome(service=ChromiumService(), options=options)
-    else:
-        logging.info("initializing chrome...")
-        driver = webdriver.Chrome(service=ChromeService(), options=options)
+    # options.add_argument('--headless')
+    # options.add_argument('--no-sandbox')
+    # options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(service=Service(), options=options)
     driver.implicitly_wait(5)
 
     logging.info("loading config files...")
