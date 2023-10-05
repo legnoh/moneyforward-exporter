@@ -1,4 +1,4 @@
-FROM seleniarm/standalone-chromium:latest
+FROM seleniarm/standalone-chromium:4.10.0
 
 USER root
 WORKDIR /usr/src/app
