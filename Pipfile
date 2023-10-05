@@ -6,7 +6,9 @@ name = "pypi"
 [packages]
 prometheus-client = "*"
 pyyaml = "*"
-selenium = "*"
+
+# https://github.com/seleniumhq-community/docker-seleniarm/issues/46
+selenium = "4.10.*"
 
 [dev-packages]
 
