@@ -16,4 +16,4 @@ updates:
     ignore:
       # https://github.com/seleniumhq-community/docker-seleniarm/issues/46
       - dependency-name: "selenium"
-        versions: ["4.11.*", "4.12.*", "4.13.*"]
+        versions: ["4.*"]
