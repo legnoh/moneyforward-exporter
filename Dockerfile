@@ -1,18 +1,18 @@
-FROM seleniarm/standalone-chromium:4.10.0
+FROM selenium/standalone-chromium:4.27.0
 
 USER root
-WORKDIR /usr/src/app
+ENV WORKDIR=/usr/src/app
+WORKDIR ${WORKDIR}
 
 ENV DISPLAY=:99
 ENV TZ="Asia/Tokyo"
+ENV SE_CHROMEDRIVER="/usr/bin/chromedriver"
 
-RUN apt -y update \
-    && apt -y install python3 python3-pip
+RUN apt -y install python3 python3-pip
 
 COPY . ${WORKDIR}
 
-RUN pip3 install --break-system-packages -r requirements.txt \
-    && rm -rf requirements.txt
+RUN pip3 install --break-system-packages -r requirements.txt
 
 EXPOSE 8000
 

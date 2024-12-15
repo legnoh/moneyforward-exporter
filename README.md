@@ -8,9 +8,13 @@ Prometheus exporter for [MoneyForward ME](https://www.moneyforward.com/).
 ### docker
 
 ```sh
+# please fulfil your credentials
+cp example.env .env
+vi .env
+
+# start
 docker run -d -p 8000:8000 \
-  -e MONEYFORWARD_EMAIL="yourname@mail.com" \
-  -e MONEYFORWARD_PASSWORD="yourPassw0rd" \
+  --env-file .env \
   legnoh/moneyforward-exporter
 
 # wait 60s and get request
