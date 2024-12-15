@@ -1,11 +1,12 @@
-import time
+import datetime, logging, time, base64, os
 from prometheus_client import Gauge, Counter, Info
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
 
-def login(driver, email, password):
+def login(driver:WebDriver, email:str, password:str) -> WebDriver | None:
     try:
-        driver.implicitly_wait(30)
+        logging.info("## jump to sign_in page...")
         driver.get('https://id.moneyforward.com/sign_in/')
 
         # メール入力
@@ -24,24 +25,31 @@ def login(driver, email, password):
 
         # バイオメトリクス認証の画面が出ていた場合は後で登録を押す
         if str(driver.current_url).startswith("https://id.moneyforward.com/passkey_promotion"):
+            logging.info("## passkey_promotion page detected")
             driver.find_element(By.CSS_SELECTOR, "main.js-mfid-users-passkey-promotions-show > div > div > div > div > section > div > a").click()
+        
+        # meのトップページに飛ぶとリダイレクトされるはずだが、されていない場合はログインに失敗しているのでログイン失敗と判定する
+        driver.get('https://moneyforward.com/me')
+        if driver.current_url == 'https://moneyforward.com/me':
+            logging.error("## login check was failed. plase check your email & password!")
+            return None
 
-        time.sleep(10)
-        driver.implicitly_wait(10)
+        logging.info("## login check successfully")
         return driver
 
-    except NoSuchElementException:
+    except NoSuchElementException as e:
+        logging.error("## login failed with selenium error: %s", e.msg)
+        save_debug_information(driver, "login")
         return None
 
-def reload(driver):
+def update_account(driver:WebDriver) -> None:
     driver.get('https://moneyforward.com/');
     refresh_button = driver.find_element(By.CSS_SELECTOR, 'a.refresh')
     refresh_button.click()
     time.sleep(300)
     driver.refresh()
-    return driver
 
-def judge_column_type(column_name):
+def judge_column_type(column_name) -> str:
     if column_name == '残高':
         return 'int'
     elif column_name == '保有数':
@@ -73,7 +81,7 @@ def judge_column_type(column_name):
     else:
         return 'str'
 
-def format_balance(string_price, key_name=None):
+def format_balance(string_price, key_name=None) -> int | float | str:
     column_type = judge_column_type(key_name)
     string_price = string_price.strip()
 
@@ -97,7 +105,7 @@ def format_balance(string_price, key_name=None):
     else:
         return string_price
 
-def table_to_dict(table):
+def table_to_dict(table) -> list[dict]:
     results = []
     rows = table.find_elements(By.TAG_NAME, 'tr')
     keys = rows[0].find_elements(By.TAG_NAME, 'th')
@@ -133,7 +141,7 @@ def create_metric_instance(metric, registry):
         return None
     return m
 
-def create_metric_all_instance(metrics:dict, registry):
+def create_metric_all_instance(metrics:dict, registry) -> dict:
     all_metrics ={}
     for main_category in metrics.values():
         for sub_category in main_category.values():
@@ -142,7 +150,7 @@ def create_metric_all_instance(metrics:dict, registry):
                all_metrics[single_metrics['name']] = m
     return all_metrics
 
-def set_metrics_by_table_data(accounts, metrics, all_metrics):
+def set_metrics_by_table_data(accounts, metrics, all_metrics) -> None:
     for metric in metrics['metrics']:
         m = all_metrics[metric['name']]
         for account in accounts:
@@ -160,3 +168,25 @@ def set_metrics_by_table_data(accounts, metrics, all_metrics):
                 m.labels(*labels).info(infos)
             elif m._type == 'counter':
                 m.labels(*labels).inc(account[metric['th']])
+
+def save_debug_information(driver:WebDriver, error_slug: str) -> None:
+
+    issuetitle = datetime.datetime.now().strftime("%Y%m%d%H%M%S") + "-" + error_slug
+    debugfile_dir = os.getenv("DEBUGFILE_DIR", "/tmp/moneyforward-exporter")
+
+    if not os.path.exists(debugfile_dir):
+        os.makedirs(debugfile_dir)
+
+    # save sourcecode
+    sourcecode = driver.execute_script("return document.body.innerHTML;")
+    sourcecode_path = debugfile_dir + "/" + issuetitle + ".html"
+    with open(sourcecode_path, "w") as f:
+        f.write(sourcecode)
+    logging.info("### sourcecode: %s", sourcecode_path)
+
+    # save screenshot
+    screenshot_data = base64.urlsafe_b64decode(driver.execute_cdp_cmd("Page.captureScreenshot", {"captureBeyondViewport": True})["data"])
+    screenshot_path = debugfile_dir + "/" + issuetitle + ".png"
+    with open(screenshot_path, "wb") as f:
+        f.write(screenshot_data)
+    logging.info("### screenshot: %s", screenshot_path)

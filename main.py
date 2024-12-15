@@ -2,6 +2,7 @@ import logging,os,platform,time,yaml,sys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from prometheus_client import CollectorRegistry, start_http_server
+from fake_useragent import UserAgent
 
 import modules.moneyforward.common as mf
 import modules.moneyforward.monthly as mf_monthly
@@ -15,55 +16,53 @@ logging.basicConfig(format=log_format, datefmt='%Y-%m-%d %H:%M:%S%z', level=log_
 
 if __name__ == '__main__':
 
-    logging.info("initializing exporter...")
+    logging.info("# initializing exporter...")
     registry = CollectorRegistry()
     start_http_server(int(os.environ.get('PORT', 8000)), registry=registry)
 
-    logging.info("initializing chromium options...")
+    logging.info("# initializing chromium options...")
+    ua = UserAgent()
     options = webdriver.ChromeOptions()
-    # options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--headless')
+    options.add_argument('--user-agent=' + ua.chrome)
     driver = webdriver.Chrome(service=Service(), options=options)
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(0.5)
 
-    logging.info("loading config files...")
+    logging.info("# loading config files...")
     with open('config/scraping.yml', 'r') as stream:
         config = yaml.load(stream, Loader=yaml.FullLoader)
     with open('config/metrics.yml', 'r') as stream:
         metrics = yaml.load(stream, Loader=yaml.FullLoader)
 
-    logging.info("create all metrics instances...")
+    logging.info("# create all metrics instances...")
     all_metrics = mf.create_metric_all_instance(metrics, registry)
 
-    logging.info("login to moneyforward...")
+    logging.info("# login to moneyforward...")
     username = os.environ['MONEYFORWARD_EMAIL']
     password = os.environ['MONEYFORWARD_PASSWORD']
     mf_driver = mf.login(driver, username, password)
     if mf_driver == None:
-        logging.fatal("login failed")
         sys.exit(1)
 
     while True:
-
         # get Monthly balance metrics
-        logging.info("gathering monthly data...")
+        logging.info("# gathering monthly data...")
         mf_monthly.set_monthly_metrics(mf_driver,all_metrics,config['monthly']['balance'], metrics['monthly']['balance'])
 
-        logging.info("gathering withdrawal data...")
+        logging.info("# gathering withdrawal data...")
         mf_monthly.set_latest_withdrawal_metrics(mf_driver,all_metrics,config['monthly']['withdrawal'], metrics['monthly']['withdrawal'])
 
         # set assets metrics
-        logging.info("gathering assets data...")
+        logging.info("# gathering assets data...")
         mf_assets.set_assets_metrics(mf_driver,all_metrics,config['assets'], metrics['assets'])
 
         # set liability metrics
-        logging.info("gathering liability data...")
+        logging.info("# gathering liability data...")
         mf_liability.set_liability_metrics(mf_driver,all_metrics,config['liability'], metrics['liability'])
 
         # set budget metrics
-        logging.info("gathering budget data...")
+        logging.info("# gathering budget data...")
         mf_budgets.set_budget_metrics(mf_driver,all_metrics,config['budget'], metrics['budget'])
 
-        logging.info("exporting moneyforward data successfully!")
+        logging.info("# exporting moneyforward data successfully!")
         time.sleep(3600*4)

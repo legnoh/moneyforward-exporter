@@ -1,12 +1,12 @@
 ---
 monthly:
   balance:
-    url: "https://moneyforward.com/"
+    url: "https://moneyforward.com/me"
     css_selector:
       title: "section#cf-info > div.headline > h2.heading-normal:nth-child(1) > span"
       data: "table#monthly_total_table_home > tbody > tr > td"
   withdrawal:
-    url: "https://moneyforward.com/"
+    url: "https://moneyforward.com/me"
     css_selector:
       accounts: "li.account"
       name: "div.heading-accounts"
