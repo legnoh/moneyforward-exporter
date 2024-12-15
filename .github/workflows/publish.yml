@@ -12,7 +12,7 @@ on:
 
 jobs:
   docker-build-and-push:
-    runs-on: macos-15
+    runs-on: ubuntu-latest
     steps:
 
       - name: Check Out Repo 
