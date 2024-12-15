@@ -1,4 +1,4 @@
-import logging,os,platform,time,yaml,sys
+import logging,os,time,yaml,sys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from prometheus_client import CollectorRegistry, start_http_server

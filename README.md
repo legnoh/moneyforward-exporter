@@ -16,12 +16,14 @@ EOF
 
 # start
 docker run -d -p 8000:8000 \
+  --shm-size="2g" \
   --env-file .env \
   legnoh/moneyforward-exporter
 
 # option: start with debugdir mount
 mkdir -p $HOME/moneyforward-exporter
 docker run -d -p 8000:8000 \
+  --shm-size="2g" \
   --env-file .env \
   -v $HOME/moneyforward-exporter:/tmp/moneyforward-exporter \
   legnoh/moneyforward-exporter
