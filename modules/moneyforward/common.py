@@ -9,6 +9,11 @@ def login(driver:WebDriver, email:str, password:str) -> WebDriver | None:
         logging.info("## jump to sign_in page...")
         driver.get('https://id.moneyforward.com/sign_in/')
 
+        # sign_inページのURLからリダイレクトされる場合、既にログイン済なのでそのまま返す
+        if '/sign_in' not in driver.current_url:
+            logging.info("## already logged in")
+            return driver
+
         # メール入力
         email_box = driver.find_element(By.NAME, 'mfid_user[email]')
         email_box.send_keys(email)

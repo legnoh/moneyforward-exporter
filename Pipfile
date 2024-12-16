@@ -8,6 +8,7 @@ fake-useragent = "*"
 prometheus-client = "*"
 pyyaml = "*"
 selenium = "*"
+pyvirtualdisplay = "*"
 
 [dev-packages]
 

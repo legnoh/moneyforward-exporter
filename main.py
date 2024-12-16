@@ -2,7 +2,7 @@ import logging,os,time,yaml,sys
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from prometheus_client import CollectorRegistry, start_http_server
-from fake_useragent import UserAgent
+from pyvirtualdisplay import Display
 
 import modules.moneyforward.common as mf
 import modules.moneyforward.monthly as mf_monthly
@@ -21,12 +21,8 @@ if __name__ == '__main__':
     start_http_server(int(os.environ.get('PORT', 8000)), registry=registry)
 
     logging.info("# initializing chromium options...")
-    ua = UserAgent()
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--user-agent=' + ua.chrome)
-    driver = webdriver.Chrome(service=Service(), options=options)
-    driver.implicitly_wait(0.5)
+    options.add_argument('--user-data-dir=/tmp/moneyforward-exporter/userdata')
 
     logging.info("# loading config files...")
     with open('config/scraping.yml', 'r') as stream:
@@ -37,32 +33,40 @@ if __name__ == '__main__':
     logging.info("# create all metrics instances...")
     all_metrics = mf.create_metric_all_instance(metrics, registry)
 
-    logging.info("# login to moneyforward...")
-    username = os.environ['MONEYFORWARD_EMAIL']
-    password = os.environ['MONEYFORWARD_PASSWORD']
-    mf_driver = mf.login(driver, username, password)
-    if mf_driver == None:
-        sys.exit(1)
-
     while True:
-        # get Monthly balance metrics
+        if os.path.isfile("/.dockerenv"):
+            logging.info("# start display...")
+            display = Display(visible=0, size=(1024, 768))
+            display.start()
+
+        logging.info("# start selenium...")
+        driver = webdriver.Chrome(service=Service(), options=options)
+        driver.implicitly_wait(0.5)
+
+        logging.info("# login to moneyforward...")
+        username = os.environ['MONEYFORWARD_EMAIL']
+        password = os.environ['MONEYFORWARD_PASSWORD']
+        driver = mf.login(driver, username, password)
+        if driver == None:
+            sys.exit(1)
+
         logging.info("# gathering monthly data...")
-        mf_monthly.set_monthly_metrics(mf_driver,all_metrics,config['monthly']['balance'], metrics['monthly']['balance'])
+        mf_monthly.set_monthly_metrics(driver,all_metrics,config['monthly']['balance'], metrics['monthly']['balance'])
 
         logging.info("# gathering withdrawal data...")
-        mf_monthly.set_latest_withdrawal_metrics(mf_driver,all_metrics,config['monthly']['withdrawal'], metrics['monthly']['withdrawal'])
+        mf_monthly.set_latest_withdrawal_metrics(driver,all_metrics,config['monthly']['withdrawal'], metrics['monthly']['withdrawal'])
 
-        # set assets metrics
         logging.info("# gathering assets data...")
-        mf_assets.set_assets_metrics(mf_driver,all_metrics,config['assets'], metrics['assets'])
+        mf_assets.set_assets_metrics(driver,all_metrics,config['assets'], metrics['assets'])
 
-        # set liability metrics
         logging.info("# gathering liability data...")
-        mf_liability.set_liability_metrics(mf_driver,all_metrics,config['liability'], metrics['liability'])
+        mf_liability.set_liability_metrics(driver,all_metrics,config['liability'], metrics['liability'])
 
-        # set budget metrics
         logging.info("# gathering budget data...")
-        mf_budgets.set_budget_metrics(mf_driver,all_metrics,config['budget'], metrics['budget'])
+        mf_budgets.set_budget_metrics(driver,all_metrics,config['budget'], metrics['budget'])
 
         logging.info("# exporting moneyforward data successfully!")
+        driver.quit()
+        if os.path.isfile("/.dockerenv"):
+            display.stop()
         time.sleep(3600*4)
