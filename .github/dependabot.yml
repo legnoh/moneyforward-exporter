@@ -13,7 +13,3 @@ updates:
     schedule:
       interval: daily
       time: "04:00" # 13:00(UTC+9)
-    ignore:
-      # https://github.com/seleniumhq-community/docker-seleniarm/issues/46
-      - dependency-name: "selenium"
-        versions: ["4.*"]

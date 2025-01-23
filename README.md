@@ -37,14 +37,14 @@ curl http://localhost:8000/metrics
 ```sh
 # clone
 git clone https://github.com/legnoh/moneyforward-exporter.git && cd moneyforward-exporter
-pipenv install
+uv sync --freeze
 
 # please fulfil your credentials
 cp example.env .env
 vi .env
 
 # execute
-pipenv run main
+uv run main.py
 ```
 
 ## Metrics
