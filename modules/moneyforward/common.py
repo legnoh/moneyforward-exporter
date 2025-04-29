@@ -1,10 +1,10 @@
-import datetime, logging, time, base64, os
+import datetime, logging, time, base64, os, pyotp
 from prometheus_client import Gauge, Counter, Info
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException
 
-def login(driver:WebDriver, email:str, password:str) -> WebDriver | None:
+def login(driver:WebDriver, email:str, password:str, totp_secret:str) -> WebDriver | None:
     try:
         logging.info("## jump to sign_in page...")
         driver.get('https://id.moneyforward.com/sign_in/')
@@ -16,6 +16,7 @@ def login(driver:WebDriver, email:str, password:str) -> WebDriver | None:
 
         # メール入力
         email_box = driver.find_element(By.NAME, 'mfid_user[email]')
+        email_box.clear()
         email_box.send_keys(email)
         email_box.submit()
 
@@ -23,6 +24,20 @@ def login(driver:WebDriver, email:str, password:str) -> WebDriver | None:
         password_box = driver.find_element(By.NAME, 'mfid_user[password]')
         password_box.send_keys(password)
         password_box.submit()
+
+        # 二要素認証のメール画面になった場合は異常終了
+        if str(driver.current_url).startswith("https://id.moneyforward.com/email_otp"):
+            logging.fatal("## email otp page detected! Please set up your 2FA setting in moneyforward.com!")
+        
+        # 通常のGoogleOTPにいけた場合は、OTPコードを入力してsubmitする
+        if str(driver.current_url).startswith("https://id.moneyforward.com/two_factor_auth/totp"):
+            logging.info("## totp page detected")
+            # OTPコードを入力してsubmitする
+            totp = pyotp.TOTP(s=totp_secret,name=email, issuer="MoneyForward")
+            totp_code = totp.now()
+            totp_box = driver.find_element(By.CSS_SELECTOR, 'input#otp_attempt')
+            totp_box.send_keys(totp_code)
+            totp_box.submit()
 
         # このアカウントでログインするの画面を通る
         driver.get('https://moneyforward.com/sign_in/')

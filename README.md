@@ -5,6 +5,13 @@ Prometheus exporter for [MoneyForward ME](https://www.moneyforward.com/).
 
 ## Usage
 
+### required
+
+- **Two-factor authentication(2FA) must be set up in advance.**
+  - Go to the MoneyForward ID 2FA settings page and enable 2FA.
+  - During the setup, copy the text displayed under `コードを使用してください` and complete the setup. (This is necessary to perform 2FA from within the application.)
+  ![totp-preparing](https://github.com/user-attachments/assets/c72b6249-07b4-4a27-9e4e-83185db65bfd)
+
 ### docker
 
 ```sh
@@ -12,6 +19,7 @@ Prometheus exporter for [MoneyForward ME](https://www.moneyforward.com/).
 cat <<EOF > .env
 MONEYFORWARD_EMAIL=youremail@localhost
 MONEYFORWARD_PASSWORD=yourawesomepassword
+MONEYFORWARD_TOTP_SECRET=ABC...XYZ
 EOF
 
 # start

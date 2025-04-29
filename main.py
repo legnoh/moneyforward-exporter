@@ -46,7 +46,8 @@ if __name__ == '__main__':
         logging.info("# login to moneyforward...")
         username = os.environ['MONEYFORWARD_EMAIL']
         password = os.environ['MONEYFORWARD_PASSWORD']
-        driver = mf.login(driver, username, password)
+        totp_secret = os.environ.get('MONEYFORWARD_TOTP_SECRET', None).replace(" ", "")
+        driver = mf.login(driver, username, password, totp_secret)
         if driver == None:
             sys.exit(1)
 
