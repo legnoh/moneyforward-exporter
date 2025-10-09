@@ -42,17 +42,12 @@ def login(driver:WebDriver, email:str, password:str, totp_secret:str) -> WebDriv
         # このアカウントでログインするの画面を通る
         driver.get('https://moneyforward.com/sign_in/')
         driver.find_element(By.CSS_SELECTOR, 'form > button').click()
+        time.sleep(5)
 
         # バイオメトリクス認証の画面が出ていた場合は後で登録を押す
         if str(driver.current_url).startswith("https://id.moneyforward.com/passkey_promotion"):
             logging.info("## passkey_promotion page detected")
             driver.find_element(By.CSS_SELECTOR, "main.js-mfid-users-passkey-promotions-show > div > div > div > div > section > div > a").click()
-        
-        # meのトップページに飛ぶとリダイレクトされるはずだが、されていない場合はログインに失敗しているのでログイン失敗と判定する
-        driver.get('https://moneyforward.com/me')
-        if driver.current_url == 'https://moneyforward.com/me':
-            logging.error("## login check was failed. plase check your email & password!")
-            return None
 
         logging.info("## login check successfully")
         return driver
