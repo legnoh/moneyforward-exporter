@@ -76,7 +76,7 @@ requires-dist = [
     { name = "pyotp", specifier = ">=2.9.0" },
     { name = "pyvirtualdisplay", specifier = ">=3.0" },
     { name = "pyyaml", specifier = ">=6.0.3" },
-    { name = "selenium", specifier = ">=4.28.0" },
+    { name = "selenium", specifier = ">=4.41.0" },
 ]
 
 [[package]]
