@@ -76,7 +76,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "fake-useragent", specifier = ">=2.2.0" },
-    { name = "prometheus-client", specifier = ">=0.21.1" },
+    { name = "prometheus-client", specifier = ">=0.24.1" },
     { name = "pyotp", specifier = ">=2.9.0" },
     { name = "pyvirtualdisplay", specifier = ">=3.0" },
     { name = "pyyaml", specifier = ">=6.0.3" },
