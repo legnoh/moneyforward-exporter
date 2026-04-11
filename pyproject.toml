@@ -3,7 +3,7 @@ name = "moneyforward-exporter"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.14.3"
+requires-python = ">=3.14.4"
 dependencies = [
     "fake-useragent>=2.2.0",
     "prometheus-client>=0.25.0",
