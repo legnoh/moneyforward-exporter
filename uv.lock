@@ -73,7 +73,7 @@ dependencies = [
 requires-dist = [
     { name = "fake-useragent", specifier = ">=2.2.0" },
     { name = "prometheus-client", specifier = ">=0.26.0" },
-    { name = "pyotp", specifier = ">=2.11.1" },
+    { name = "pyotp", specifier = ">=2.11.2" },
     { name = "pyvirtualdisplay", specifier = ">=3.0" },
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "selenium", specifier = ">=4.52.0" },
